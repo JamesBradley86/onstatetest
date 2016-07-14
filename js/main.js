@@ -23,6 +23,14 @@ ostest.bounds = null;
 // will store user's location (as a google.maps.LatLng object)
 ostest.userMapPoint = null;
 
+ostest.markers = [];
+
+ostest.removeMarkers = function () {
+    for (var i = 0; i < ostest.markers.length; i++) {
+        ostest.markers[i].setMap(null);
+    }
+};
+
 // function to add a new location
 ostest.addLocation = function(name, lat, lng) {
     
@@ -127,26 +135,24 @@ ostest.findNearest = function(name, lat, lng) {
 
 ostest.displayResults = function() {
     
-    // TODO: clear old markers
-    
-    var marker; 
+    ostest.removeMarkers(); 
     
     // user's location
     ostest.bounds.extend(ostest.userMapPoint);
-    marker = new google.maps.Marker({
+    ostest.markers.push( new google.maps.Marker({
         position: ostest.userMapPoint,
         map: ostest.map,
         icon: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
-    });    
+    }));    
     
     
     for (var i = 0, len = ostest.locations.length; i < len; i++) {
         ostest.bounds.extend(ostest.locations[i].mapPoint);
-        marker = new google.maps.Marker({
+        ostest.markers.push(new google.maps.Marker({
             position: ostest.locations[i].mapPoint,
             map: ostest.map,
             icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
-        });
+        }));
     }
     ostest.map.fitBounds(ostest.bounds);
     
